@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PassProve - Ověření věku pro e-shopy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #333;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eaeaea;
+    }
+    
+    h1 {
+      color: #173B3F;
+    }
+    
+    .demo-section {
+      margin: 3rem 0;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .code-block {
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: monospace;
+    }
+    
+    .button-container {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eaeaea;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PassProve Widget</h1>
+    <p>Jednoduché a efektivní řešení pro ověření věku návštěvníků vašeho e-shopu</p>
+  </header>
+  
+  <main>
+    <section>
+      <h2>O PassProve Widgetu</h2>
+      <p>
+        PassProve je moderní řešení pro ověření věku návštěvníků e-shopů prodávajících věkově omezené produkty.
+        Nabízíme různé metody ověření, od bankovní identity přes rozpoznání obličeje až po skenování dokladů.
+      </p>
+      <p>
+        Widget lze snadno integrovat do jakéhokoliv e-shopu, nezávisle na použitých technologiích.
+      </p>
+    </section>
+    
+    <section class="demo-section">
+      <h2>Ukázka použití</h2>
+      <p>Pro integraci widgetu do vašeho e-shopu stačí přidat následující kód:</p>
+      
+      <div class="code-block">
+        <pre>&lt;!-- 1. Přidejte skript PassProve do vašeho HTML --&gt;
+&lt;script src="https://passprove-widget.vercel.app/passprove-widget.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. Přidejte kontejner pro umístění widgetu --&gt;
+&lt;div id="passprove-container"&gt;&lt;/div&gt;
+
+&lt;!-- 3. Inicializujte widget --&gt;
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', function() {
+    PassProve.init({
+      selector: '#passprove-container',
+      shopId: 'vas-eshop-id',  // Povinný parametr
+      primaryColor: '#173B3F', // Volitelné přizpůsobení
+      buttonText: 'Ověřit věk'
+    });
+  });
+&lt;/script&gt;</pre>
+      </div>
+      
+      <div class="button-container">
+        <div id="passprove-demo"></div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Dostupné metody ověření</h2>
+      <ul>
+        <li><strong>BankID</strong> - Ověření pomocí bankovní identity</li>
+        <li><strong>MojeID</strong> - Ověření pomocí mojeID</li>
+        <li><strong>OCR</strong> - Skenování dokladu totožnosti</li>
+        <li><strong>Face Scan</strong> - Ověření pomocí rozpoznání obličeje</li>
+        <li><strong>QR kód</strong> - Ověření pomocí QR kódu na jiném zařízení</li>
+        <li><strong>Opakované ověření</strong> - Rychlé ověření pro uživatele, kteří již ověřením prošli</li>
+      </ul>
+    </section>
+  </main>
+  
+  <footer>
+    <p>&copy; 2023 PassProve. Všechna práva vyhrazena.</p>
+  </footer>
+  
+  <!-- Načtení PassProve widgetu -->
+  <script src="/passprove-widget.js"></script>
+  
+  <!-- Inicializace widgetu pro demo -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      PassProve.init({
+        selector: '#passprove-demo',
+        shopId: 'demo-shop-id',
+        buttonText: 'Vyzkoušet ověření věku'
+      });
+    });
+  </script>
+</body>
+</html> 
