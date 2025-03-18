@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test PassProve Widget</title>
+</head>
+<body>
+  <div id="age-verification-button"></div>
+  <script src="./dist/vanilla.js"></script>
+  <script>
+    window.PassProve.init({
+      selector: "#age-verification-button",
+      shopId: "12345",
+      shopLogo: "https://example.com/logo.png",
+      primaryColor: "#173B3F",
+      buttonText: "Ověřit věk",
+    });
+  </script>
+</body>
+</html>

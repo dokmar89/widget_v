@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PassProve Widget - Demo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eaeaea;
+    }
+    
+    .demo-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .demo-section {
+      padding: 2rem;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
+    }
+    
+    h1, h2 {
+      margin-top: 0;
+    }
+    
+    code {
+      background-color: #f5f5f5;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    
+    pre {
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PassProve Widget - Ukázka použití bez Reactu</h1>
+    <p>Tato stránka demonstruje, jak snadno přidat PassProve widget pro ověření věku do vašeho e-shopu.</p>
+  </header>
+  
+  <div class="demo-container">
+    <section class="demo-section">
+      <h2>Jednoduchá implementace</h2>
+      <p>Přidejte widget do vašeho e-shopu s minimálním množstvím kódu:</p>
+      
+      <pre><code>&lt;!-- 1. Přidejte skript PassProve do vašeho HTML --&gt;
+&lt;script src="https://cdn.passprove.com/passprove-widget.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. Přidejte kontejner pro umístění widgetu --&gt;
+&lt;div id="passprove-container"&gt;&lt;/div&gt;
+
+&lt;!-- 3. Inicializujte widget --&gt;
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', function() {
+    PassProve.init({
+      selector: '#passprove-container',
+      shopId: 'vas-eshop-id',  // Povinný parametr
+      primaryColor: '#2563eb', // Volitelné přizpůsobení
+      buttonText: 'Ověřit věk'
+    });
+  });
+&lt;/script&gt;</code></pre>
+      
+      <div id="passprove-container-basic" style="margin-top: 1rem;"></div>
+    </section>
+    
+    <section class="demo-section">
+      <h2>Přizpůsobení widgetu</h2>
+      <p>Widget můžete snadno přizpůsobit vlastním potřebám:</p>
+      
+      <pre><code>PassProve.init({
+  selector: '#passprove-container-custom',
+  shopId: 'vas-eshop-id',
+  primaryColor: '#10b981',    // Zelená barva
+  secondaryColor: '#d1fae5',  // Světle zelená barva
+  buttonShape: 'pill',        // Zaoblené tlačítko (možnosti: 'rounded', 'square', 'pill')
+  buttonText: 'Potvrdit věk 18+',
+  showBankID: true,           // Můžete vypnout metody ověření, které nechcete používat
+  showFaceScan: false,
+  onVerificationSuccess: function(method) {
+    console.log('Uživatel byl úspěšně ověřen metodou: ' + method);
+    // Zde můžete přidat vlastní kód, který se spustí po úspěšném ověření
+  }
+});</code></pre>
+      
+      <div id="passprove-container-custom" style="margin-top: 1rem;"></div>
+    </section>
+  </div>
+  
+  <!-- Načtení PassProve widgetu -->
+  <script src="./dist/passprove-widget.js"></script>
+  
+  <!-- Inicializace widgetu pro demo -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Základní implementace
+      PassProve.init({
+        selector: '#passprove-container-basic',
+        shopId: 'demo-shop-id',
+        buttonText: 'Ověřit věk'
+      });
+      
+      // Přizpůsobená implementace
+      PassProve.init({
+        selector: '#passprove-container-custom',
+        shopId: 'demo-shop-id',
+        primaryColor: '#10b981',
+        secondaryColor: '#d1fae5',
+        buttonShape: 'pill',
+        buttonText: 'Potvrdit věk 18+',
+        showFaceScan: false,
+        onVerificationSuccess: function(method) {
+          console.log('Uživatel byl úspěšně ověřen metodou: ' + method);
+        }
+      });
+    });
+  </script>
+</body>
+</html> 
