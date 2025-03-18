@@ -16,12 +16,12 @@ serve(async (req) => {
   }
 
   try {
-    const { shopId } = await req.json()
+    const { apiKey } = await req.json()
     
     // Validace požadavku
-    if (!shopId) {
+    if (!apiKey) {
       return new Response(
-        JSON.stringify({ error: 'Shop ID je povinný parametr' }),
+        JSON.stringify({ error: 'API klíč je povinný parametr' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -29,37 +29,49 @@ serve(async (req) => {
     // Vytvoření Supabase klienta
     const supabase = createServerSupabaseClient()
     
-    // Získání konfigurace widgetu pro daný e-shop
+    // Získání konfigurace widgetu pro daný e-shop podle API klíče
     const { data: shopData, error: shopError } = await supabase
       .from('shops')
       .select('*')
-      .eq('id', shopId)
+      .eq('api_key', apiKey)
       .single()
     
     if (shopError || !shopData) {
       return new Response(
         JSON.stringify({ 
           success: false, 
-          message: 'E-shop nebyl nalezen' 
+          message: 'Neplatný API klíč nebo e-shop nebyl nalezen' 
         }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
     
+    // Kontrola stavu e-shopu
+    if (shopData.status !== 'active') {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          message: 'E-shop není aktivní' 
+        }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     // Sestavení konfigurace widgetu
     const widgetConfig = {
+      shopId: shopData.id,
       shopLogo: shopData.logo_url || null,
       welcomeText: shopData.welcome_text || "Vítejte! Pro pokračování je nutné ověřit váš věk.",
       primaryColor: shopData.primary_color || "#173B3F",
       secondaryColor: shopData.secondary_color || "#96C4C8",
       buttonShape: shopData.button_shape || "rounded",
       fontFamily: shopData.font_family || "inter",
-      showBankID: shopData.show_bank_id !== false,
-      showMojeID: shopData.show_moje_id !== false,
-      showOCR: shopData.show_ocr !== false,
-      showFaceScan: shopData.show_face_scan !== false,
-      showReVerification: shopData.show_re_verification !== false,
-      showQRCode: shopData.show_qr_code !== false
+      showBankID: shopData.verification_methods?.includes('bank_id') !== false,
+      showMojeID: shopData.verification_methods?.includes('moje_id') !== false,
+      showOCR: shopData.verification_methods?.includes('ocr') !== false,
+      showFaceScan: shopData.verification_methods?.includes('face_scan') !== false,
+      showReVerification: shopData.verification_methods?.includes('re_verification') !== false,
+      showQRCode: shopData.verification_methods?.includes('qr_code') !== false
     }
     
     // Vrácení úspěšné odpovědi
@@ -83,6 +95,7 @@ serve(async (req) => {
       JSON.stringify({
         success: false,
         message: 'Došlo k chybě při zpracování požadavku',
+        details: error.message
       }),
       { 
         status: 500, 
