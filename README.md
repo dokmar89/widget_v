@@ -1,50 +1,50 @@
-# PassProve — configurable verification widget
+# PassProve — konfigurovatelný ověřovací widget
 
-A React/TypeScript widget prototype for presenting age-verification choices inside an e-commerce interface. The repository combines configurable UI components, demonstration pages and Supabase Edge Function source.
+Prototyp widgetu v Reactu a TypeScriptu pro nabídku způsobů ověření věku v e-shopu. Repozitář spojuje upravitelné uživatelské rozhraní, ukázkové stránky a zdrojové kódy Supabase Edge Functions.
 
-**Status:** Portfolio prototype; packaging is currently incomplete. Provider integration and production readiness are not established.
+**Stav:** Prototyp do portfolia; sestavení balíčku není dokončené. Funkčnost napojení poskytovatelů ani připravenost pro produkci nejsou potvrzené.
 
-## Scope
+## Co projekt obsahuje
 
-- Configurable branding, labels, button style and visibility of verification methods in `PassProveWidget.tsx`.
-- UI flows for face scanning, document/OCR, QR codes and repeated verification, alongside BankID/mojeID choices.
-- Supabase function source for verification sessions, method handling, pricing and result storage.
+- Nastavení vzhledu, textů, tlačítek a viditelnosti ověřovacích metod v `PassProveWidget.tsx`.
+- Rozhraní pro sken obličeje, doklady/OCR, QR kódy a opakované ověření, doplněné o volby BankID a mojeID.
+- Zdrojové kódy funkcí pro ověřovací relace, jednotlivé metody, ceny a ukládání výsledků.
 
-## Technology
+## Technologie
 
 Next.js, React, TypeScript, Tailwind CSS, Supabase, Rollup.
 
-## Architecture and source map
+## Architektura a struktura
 
-- `PassProveWidget.tsx` — public React component and its props
-- `components/` — verification UI and shared components
-- `supabase/functions/` — backend function source
-- `rollup.config.cjs` — library bundle configuration
-- `src/types/index.d.ts` — type declaration entry
+- `PassProveWidget.tsx` — hlavní React komponenta a její parametry
+- `age-verification-modal.tsx` — zdroj ověřovacího modálního okna v kořeni projektu
+- `supabase/functions/` — zdrojové kódy serverových funkcí
+- `rollup.config.cjs` — konfigurace sestavení knihovny
+- `src/types/index.d.ts` — vstupní soubor typových deklarací
 
-## Local development
+## Lokální vývoj
 
-Requires Node.js and npm. The declared package workflow is:
+Potřebujete Node.js a npm. Balíček deklaruje následující příkazy:
 
 ```sh
 npm install
 npm run build
-# Watch library source:
+# Sledování změn zdrojových souborů:
 npm run dev
 ```
 
-Build is blocked by the missing entry point described below; these commands are documented, not reported as passing. `npm run serve` serves a `dev` directory that also needs a validated demo setup.
+Sestavení blokuje chybějící vstupní soubor popsaný níže. Příkazy nebyly označeny za úspěšně otestované. `npm run serve` obsluhuje složku `dev`, jejíž ukázkové prostředí je také nutné ověřit.
 
-## Configuration and limitations
+## Konfigurace a omezení
 
-The Rollup configuration expects `src/index.ts`, which is absent from this checkout. It also consumes generated type declarations under `dist/esm/types/`; packaging needs repair and validation before a release. `npm run dev` starts the Rollup watcher, not a Next.js web server. The repository declares `private: true`; publication of a package named `passprove-widget` has not been verified.
+Hlavní komponenta odkazuje na `./components/age-verification-modal`, ale složka `components/` v této verzi chybí; stejnojmenný zdroj je v kořeni. Také tento import vyžaduje opravu. Konfigurace Rollupu očekává `src/index.ts`, který v této verzi chybí. Pracuje také s generovanými deklaracemi v `dist/esm/types/`; před vydáním je nutné sestavení opravit a ověřit. `npm run dev` spouští sledování změn v Rollupu, nikoli vývojový server Next.js. Balíček má nastaveno `private: true`; zveřejnění balíčku `passprove-widget` nebylo ověřeno.
 
-The BankID function contains random/demo logic; available UI choices are not evidence of certified identity verification. A client callback must not be trusted as authoritative proof of age. Use synthetic data until backend authorization, provider callbacks and data handling have been reviewed.
+Funkce pro BankID obsahuje náhodnou/ukázkovou logiku. Nabízené volby v rozhraní nejsou důkazem certifikovaného ověření identity. Výsledek klientského callbacku nelze považovat za autoritativní potvrzení věku. Do ověření oprávnění, callbacků poskytovatelů a práce s daty používejte fiktivní údaje.
 
-## Portfolio relevance
+## Přínos pro portfolio
 
-Demonstrates configurable component design, typed interfaces and the boundary between embedded UI and backend services. It is a useful integration case study with explicit remaining engineering work.
+Ukazuje návrh konfigurovatelných komponent, typovaného rozhraní a rozdělení odpovědnosti mezi vložený widget a serverové služby. Zbývající technická práce je výslovně popsaná.
 
-## Documentation next steps
+## Co doplnit do dokumentace
 
-Capture screenshots using synthetic data, document a reproducible test run, and record which integrations have been verified. Keep credentials and deployment-specific configuration outside version control.
+Snímky obrazovky s fiktivními daty, opakovatelný postup ověření a přehled skutečně otestovaných integrací. Přihlašovací údaje a konfigurace konkrétního nasazení patří mimo Git.
