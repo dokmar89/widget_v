@@ -1,143 +1,50 @@
-# PassProve Widget
+# PassProve — configurable verification widget
 
-Univerzální widget pro ověřování věku pro e-shopy. Tento balíček umožňuje jednoduchou integraci ověřování věku do vašeho e-shopu.
+A React/TypeScript widget prototype for presenting age-verification choices inside an e-commerce interface. The repository combines configurable UI components, demonstration pages and Supabase Edge Function source.
 
-## Instalace
+**Status:** Portfolio prototype; packaging is currently incomplete. Provider integration and production readiness are not established.
 
-### NPM
-```bash
-npm install passprove-widget
+## Scope
+
+- Configurable branding, labels, button style and visibility of verification methods in `PassProveWidget.tsx`.
+- UI flows for face scanning, document/OCR, QR codes and repeated verification, alongside BankID/mojeID choices.
+- Supabase function source for verification sessions, method handling, pricing and result storage.
+
+## Technology
+
+Next.js, React, TypeScript, Tailwind CSS, Supabase, Rollup.
+
+## Architecture and source map
+
+- `PassProveWidget.tsx` — public React component and its props
+- `components/` — verification UI and shared components
+- `supabase/functions/` — backend function source
+- `rollup.config.cjs` — library bundle configuration
+- `src/types/index.d.ts` — type declaration entry
+
+## Local development
+
+Requires Node.js and npm. The declared package workflow is:
+
+```sh
+npm install
+npm run build
+# Watch library source:
+npm run dev
 ```
 
-### Yarn
-```bash
-yarn add passprove-widget
-```
+Build is blocked by the missing entry point described below; these commands are documented, not reported as passing. `npm run serve` serves a `dev` directory that also needs a validated demo setup.
 
-## Použití
+## Configuration and limitations
 
-### React
+The Rollup configuration expects `src/index.ts`, which is absent from this checkout. It also consumes generated type declarations under `dist/esm/types/`; packaging needs repair and validation before a release. `npm run dev` starts the Rollup watcher, not a Next.js web server. The repository declares `private: true`; publication of a package named `passprove-widget` has not been verified.
 
-```jsx
-import { PassProveWidget } from 'passprove-widget';
+The BankID function contains random/demo logic; available UI choices are not evidence of certified identity verification. A client callback must not be trusted as authoritative proof of age. Use synthetic data until backend authorization, provider callbacks and data handling have been reviewed.
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Můj e-shop s věkovým omezením</h1>
-      
-      <PassProveWidget 
-        shopId="vas-shop-id"
-        primaryColor="#1a73e8"
-        buttonText="Ověřit věk pro vstup"
-        onVerificationSuccess={(method, data) => {
-          console.log(`Úspěšné ověření metodou: ${method}`, data);
-          // Zde můžete přesměrovat uživatele nebo zobrazit obsah s věkovým omezením
-        }}
-      />
-    </div>
-  );
-}
-```
+## Portfolio relevance
 
-### Vanilla JavaScript
+Demonstrates configurable component design, typed interfaces and the boundary between embedded UI and backend services. It is a useful integration case study with explicit remaining engineering work.
 
-```html
-<div id="age-verification"></div>
+## Documentation next steps
 
-<script src="https://cdn.jsdelivr.net/npm/passprove-widget/dist/umd/passprove-widget.min.js"></script>
-<script>
-  const widget = PassProve.createWidget({
-    container: '#age-verification',
-    shopId: 'vas-shop-id',
-    primaryColor: '#1a73e8',
-    buttonText: 'Ověřit věk pro vstup',
-    onVerificationSuccess: (method, data) => {
-      console.log(`Úspěšné ověření metodou: ${method}`, data);
-      // Zde můžete přesměrovat uživatele nebo zobrazit obsah s věkovým omezením
-    }
-  });
-</script>
-```
-
-## Konfigurace
-
-PassProve Widget nabízí řadu možností konfigurace:
-
-| Vlastnost           | Typ                 | Výchozí hodnota | Popis |
-|---------------------|---------------------|-----------------|-------|
-| shopId              | string              | -               | *Povinné* - ID vašeho obchodu pro identifikaci |
-| shopLogo            | string              | -               | URL loga e-shopu |
-| welcomeText         | string              | "Vítejte! Pro pokračování je nutné ověřit váš věk." | Uvítací text v modálním okně |
-| primaryColor        | string              | "#173B3F"       | Primární barva (HEX) |
-| secondaryColor      | string              | "#96C4C8"       | Sekundární barva (HEX) |
-| buttonShape         | "rounded" \| "square" \| "pill" | "rounded" | Tvar tlačítek |
-| fontFamily          | string              | "inter"         | Font použitý ve widgetu |
-| showBankID          | boolean             | true            | Zobrazit metodu BankID |
-| showMojeID          | boolean             | true            | Zobrazit metodu mojeID |
-| showOCR             | boolean             | true            | Zobrazit metodu OCR |
-| showFaceScan        | boolean             | true            | Zobrazit metodu Face Scan |
-| showReVerification  | boolean             | true            | Zobrazit metodu opakovaného ověření |
-| showQRCode          | boolean             | true            | Zobrazit metodu QR kódu |
-| onVerificationSuccess | function          | -               | Callback při úspěšném ověření |
-| onClose             | function            | -               | Callback při zavření modálního okna |
-| buttonClassName     | string              | ""              | Vlastní CSS třídy pro tlačítko |
-| buttonText          | string              | "Ověřit věk"    | Text tlačítka |
-| autoOpen            | boolean             | false           | Automaticky otevřít modální okno při načtení stránky |
-
-## Metody ověření
-
-Widget podporuje několik metod ověření věku:
-
-1. **BankID** - Ověření prostřednictvím bankovní identity
-2. **MojeID** - Ověření pomocí mojeID
-3. **OCR** - Ověření naskenováním dokladu totožnosti
-4. **Face Scan** - Ověření pomocí analýzy obličeje
-5. **QR kód** - Ověření pomocí naskenování QR kódu z jiného zařízení
-6. **Opakované ověření** - Pro vracející se zákazníky, kteří již byli dříve ověřeni
-
-## API Reference
-
-Balíček obsahuje také nízkoúrovňové API pro vlastní implementaci:
-
-```javascript
-import { ApiService } from 'passprove-widget';
-
-// Příklad volání API
-async function verifyUser() {
-  try {
-    // Vytvoření session
-    const session = await ApiService.createSession('ocr', 'vas-shop-id');
-    
-    // Ověření pomocí OCR
-    const result = await ApiService.verifyWithOcr(session.sessionId, imageBase64);
-    
-    if (result.success) {
-      console.log('Ověření úspěšné!', result.data);
-    }
-  } catch (error) {
-    console.error('Chyba při ověřování:', error);
-  }
-}
-```
-
-## Vlastní komponenty
-
-Widget lze rozšířit o vlastní komponenty nebo upravit existující:
-
-```jsx
-import { PassProveWidget } from 'passprove-widget';
-import MyCustomVerification from './MyCustomVerification';
-
-function CustomizedWidget() {
-  return (
-    <PassProveWidget
-      shopId="vas-shop-id"
-      renderCustomMethod={(props) => (
-        <MyCustomVerification {...props} />
-      )}
-    />
-  );
-}
-```
-# widget_v
+Capture screenshots using synthetic data, document a reproducible test run, and record which integrations have been verified. Keep credentials and deployment-specific configuration outside version control.
